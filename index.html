@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Emitter with Events</title>
+</head>
+
+<body>
+    <h1>WebSocket Example</h1>
+    <div id="messages"></div>
+    <script>
+        const socket = new WebSocket("ws://localhost:8082/ws");
+        let ws = new WebSocket('ws://localhost:8080/tokens/ws');
+ws.onopen = () => console.log('Connected');
+ws.onmessage = (event) => console.log('Message from server ', event.data);
+ws.onclose = () => console.log('Connection closed');
+ws.onerror = (error) => console.error('WebSocket error: ', error);
+        socket.onopen = () => {
+            console.log("Connected to WebSocket");
+        };
+
+        socket.onmessage = (event) => {
+            try {
+                const message = JSON.parse(event.data);
+                if (message.event === "message") {
+                    console.log("Received:", message.data);
+                }
+            } catch (err) {
+                console.error("Error parsing message:", err);
+            }
+        };
+
+        socket.onclose = () => {
+            console.log("WebSocket connection closed.");
+        };
+
+    </script>
+</body>
+
+</html>
